@@ -1,0 +1,36 @@
+
+studentLogIn;SELECT username, password FROM students s WHERE s.username='{0}' AND s.password='{1}' ORDER BY s.id ASC;gritacademyportal;localhost;3306;root;root
+teacherLogIn;select username, password from teachers t where t.username='{0}' AND t.password='{1}' ORDER BY t.id ASC;gritacademyportal;localhost;3306;root;root
+checkTeacherPrivilageDuringLogIn; select privilage_type from teachers t where t.username='{0}' AND t.password='{1}' ORDER BY t.id ASC;gritacademyportal;localhost;3306;root;root
+
+showAllStudents; select * from students;gritacademyportal;localhost;3306;root;root
+showAllCourses; select * from courses;gritacademyportal;localhost;3306;root;root
+showAllTeachers; select * from teachers;gritacademyportal;localhost;3306;root;root
+
+selectWhichCoursesTheStudentsAreHaving; SELECT c.name AS course_name, CONCAT(t.fName, ' ', t.lName) AS teacher_name, GROUP_CONCAT(CONCAT(cs.fName, ' ', cs.lName) order by cs.fName SEPARATOR ', ') AS classmates FROM students s JOIN student_courses sc ON s.ID = sc.students_id JOIN courses c ON sc.courses_id = c.ID JOIN teachers_courses tc ON c.ID = tc.courses_id JOIN teachers t ON tc.teachers_id = t.ID JOIN student_courses scs ON c.ID = scs.courses_id JOIN students cs ON scs.students_id = cs.ID where s.fName = '{0}' and s.lName = '{1}' GROUP BY s.ID, c.ID ORDER BY s.lName, s.fName, c.name;gritacademyportal;localhost;3306;root;root
+undo; select c.name as Name_of_the_course, concat(t.fName, ' ', t.lName) AS Teacher_name from teachers_courses tc join courses c on tc.courses_id = c.ID join teachers t on tc.teachers_id = t.ID where t.fName = '{0}' and t.lName = '{1}' order by c.name ASC;gritacademyportal;localhost;3306;root;root
+selectWhichCoursesTheTeachersAreHaving; SELECT c.name AS Name_of_the_course, GROUP_CONCAT(CONCAT(s.fName, ' ', s.lName) order by s.fName SEPARATOR ', ') AS Students_in_course FROM courses c LEFT JOIN student_courses sc ON c.ID = sc.courses_id LEFT JOIN students s ON sc.students_id = s.ID JOIN teachers_courses tc ON c.ID = tc.courses_id JOIN teachers t ON tc.teachers_id = t.ID WHERE t.fName = '{0}' AND t.lName = '{1}' GROUP BY c.name ORDER BY c.name ASC;gritacademyportal;localhost;3306;root;root
+selectWhichTeachersAndStudentsTheCoursesAreHaving;SELECT c.name AS course_name, CONCAT(t.fName, ' ', t.lName) AS teacher_name, GROUP_CONCAT(CONCAT(s.fName, ' ', s.lName) order by s.fName SEPARATOR ', ') AS student_names FROM courses c JOIN teachers_courses tc ON c.ID = tc.courses_id JOIN teachers t ON tc.teachers_id = t.ID LEFT JOIN student_courses sc ON c.ID = sc.courses_id LEFT JOIN students s ON sc.students_id = s.ID WHERE c.name = '{0}' GROUP BY c.name, t.fName, t.lName ORDER BY c.name ASC;gritacademyportal;localhost;3306;root;root
+
+insertNewCourse; insert into courses (name, YHP, description) values ('{0}',  '{1}' , '{2}');gritacademyportal;localhost;3306;root;root
+insertNewStudent;INSERT INTO students (fName, lName, town, email, phone, username, password) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');gritacademyportal;localhost;3306;root;root
+insertNewTeacher;INSERT INTO teachers (fName, lName, town, email, phone, username, password, privilage_type) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}');gritacademyportal;localhost;3306;root;root
+
+registerStudentToCourse; insert into student_courses (students_id, courses_id) values ('{0}', '{1}');gritacademyportal;localhost;3306;root;root
+registerTeacherToCourse; insert into teachers_courses (teachers_id, courses_id) values ('{0}', '{1}');gritacademyportal;localhost;3306;root;root
+
+updateCourse; update courses set name = '{0}', YHP = '{1}', description = '{2}' where name = '{3}';gritacademyportal;localhost;3306;root;root
+updateStudent; update students set fName = '{0}', lName = '{1}', town = '{2}', email = '{3}', phone = '{4}', username = '{5}', password = '{6}' where fName = '{7}' and lName = '{8}';gritacademyportal;localhost;3306;root;root
+updateTeacher; update teachers set fName = '{0}', lName = '{1}', town = '{2}', email = '{3}', phone = '{4}', username = '{5}', password = '{6}', privilage_type = '{7}' where fName = '{8}' and lName = '{9}';gritacademyportal;localhost;3306;root;root
+
+done; select * from Done;gritacademyportal;localhost;3306;root;root
+
+showAllCoursesForEveryone; select * from courses; gritacademyportal;localhost;3306;root;root
+
+
+fetchThisStudentCourse;SELECT c.name AS course_name FROM courses c JOIN student_courses sc ON c.ID = sc.courses_id JOIN students s ON sc.students_id = s.ID WHERE s.username = '{0}';gritacademyportal;localhost;3306;root;root
+showThisStudentClassProfile;SELECT c.name AS course_name, CONCAT(t.fName, ' ', t.lName) AS teacher_name, GROUP_CONCAT(CONCAT(s.fName, ' ', s.lName) SEPARATOR ', ') AS classmates FROM courses c JOIN teachers_courses tc ON c.ID = tc.courses_id JOIN teachers t ON tc.teachers_id = t.ID JOIN student_courses sc ON c.ID = sc.courses_id JOIN students s ON sc.students_id = s.ID WHERE c.ID IN (SELECT courses_id FROM student_courses WHERE students_id IN (SELECT ID FROM students WHERE username = '{0}')) AND s.username != '{0}' GROUP BY c.name, t.fName, t.lName;gritacademyportal;localhost;3306;root;root
+
+showAllStudentsWithoutConfidentialData;SELECT ID, fName, lName, town, email, phone, username from students; gritacademyportal;localhost;3306;root;root
+showAllCoursesWithoutConfidentialData; select * from courses;gritacademyportal;localhost;3306;root;root
+showAllTeachersWithoutConfidentialData; SELECT ID, fName, lName, town, email, phone, username from teachers; gritacademyportal;localhost;3306;root;root
